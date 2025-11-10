@@ -1,11 +1,11 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../css/Algorithm.css'; // Usamos los mismos estilos
+import '../css/Algorithm.css';
 
 function SeriesDeportivas() {
   const navigate = useNavigate();
   
-  // Estados para los inputs (ahora según las especificaciones)
+  // Estados para los inputs
   const [n, setN] = useState('7'); // Máximo de juegos (n <= 11)
   const [ph, setPh] = useState('0.57'); // Prob. A en casa
   const [pr, setPr] = useState('0.49'); // Prob. A de visita
@@ -40,7 +40,7 @@ function SeriesDeportivas() {
     for (let j = 1; j <= k; j++) dp[0][j] = 1.0; // A ya ganó
     for (let i = 1; i <= k; i++) dp[i][0] = 0.0; // A ya perdió
 
-    // Llenar la tabla (lógica de DP con ventaja de localía)
+    // Llenar la tabla
     for (let i = 1; i <= k; i++) {
       for (let j = 1; j <= k; j++) {
         // Determinamos qué juego se está jugando en este estado
