@@ -1,0 +1,154 @@
+/* src/css/ArbolesBinarios.css */
+
+.input-group {
+    margin-bottom: 20px;
+    text-align: left;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #34495e;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 1rem;
+}
+
+.action-buttons {
+    margin-bottom: 30px;
+}
+
+.action-buttons button {
+    margin: 5px 10px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.main-button {
+    background-color: #2ecc71;
+    color: white;
+}
+
+.main-button:hover {
+    background-color: #27ae60;
+}
+
+.secondary-button {
+    background-color: #f39c12;
+    color: white;
+}
+
+.secondary-button:hover {
+    background-color: #e67e22;
+}
+
+.exit-button {
+    background-color: #95a5a6;
+    color: white;
+}
+
+.exit-button:hover {
+    background-color: #7f8c8d;
+}
+
+.error-message {
+    color: #e74c3c;
+    background-color: #fdeded;
+    border: 1px solid #e74c3c;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 20px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.results-section {
+    margin-top: 40px;
+    padding: 20px;
+    background-color: #ecf0f1;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.table-container {
+    overflow-x: auto;
+    margin: 20px 0;
+}
+
+.result-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 0.9em;
+    min-width: 400px;
+}
+
+.result-table th, .result-table td {
+    border: 1px solid #bdc3c7;
+    padding: 8px 12px;
+    text-align: center;
+}
+
+.result-table th {
+    background-color: #3498db;
+    color: white;
+    font-weight: 600;
+}
+
+.result-table tr:nth-child(even) {
+    background-color: #f4f6f6;
+}
+
+.tree-visualization {
+    margin-top: 30px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: left;
+}
+
+.tree-structure {
+    font-family: monospace;
+    white-space: pre-wrap;
+    padding: 10px 0;
+    line-height: 1.6;
+    font-size: 1.1em;
+}
+
+.tree-node {
+    margin-left: 20px;
+}
+
+.note-message {
+    font-size: 0.9em;
+    color: #7f8c8d;
+    margin-top: 15px;
+}
+
+/* Para mantener la consistencia con el Main.css */
+.container h1 {
+    color: #2c3e50;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+.container h3 {
+    color: #555;
+    font-size: 1.3rem;
+    margin-bottom: 40px;
+    font-weight: normal;
+}
