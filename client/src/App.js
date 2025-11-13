@@ -12,9 +12,9 @@ return (
       <div className="App">
         <Routes>
           <Route path="/" element={<Main />} />
-          {/* <Route path="/reemplazo-equipos" element={<ReemplazoEquipos />} /> */}
+          <Route path="/reemplazo-equipos" element={<ReemplazoEquipos />} /> 
           <Route path="/arboles-binarios" element={<ArbolesBinarios />} />
-          {/* <Route path="/series-deportivas" element={<SeriesDeportivas />} /> */}
+          <Route path="/series-deportivas" element={<SeriesDeportivas />} /> 
           <Route path="/multiplicacion-matrices" element={<MultiplicacionMatrices />} /> 
         </Routes>
       </div>
