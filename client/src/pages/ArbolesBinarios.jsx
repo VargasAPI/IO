@@ -3,7 +3,7 @@
 import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../css/ArbolesBinarios.css';
-import '../css/Main.css'; // Para usar estilos de botones y layout generales
+import '../css/Main.css';
 
 const MAX_KEYS = 10; // Límite de llaves para el ejemplo de la tabla
 
@@ -134,8 +134,6 @@ function ArbolesBinarios() {
     }
   };
 
-  // --- Renderizado de Tablas y Árbol ---
-
   const renderTable = (table, title, keys, isRootTable = false) => {
     if (!table || table.length <= 1) return null;
     const n = keys.length;
@@ -167,7 +165,7 @@ function ArbolesBinarios() {
     );
   };
   
-  // Función para renderizar el árbol de forma recursiva (visualización simple en texto)
+  // Función para renderizar el árbol de forma recursiva
   const renderTree = (node, level = 0, side = 'Raíz') => {
     if (!node) return null;
     const indent = '–'.repeat(level * 4);
@@ -180,7 +178,7 @@ function ArbolesBinarios() {
     );
   };
   
-  // Datos de ejemplo basados en el PDF (Harrison, Lennon, McCarthey, Starr)
+  // Datos de ejemplo (Harrison, Lennon, McCarthey, Starr)
   const exampleKeys = ['Harrison', 'Lennon', 'McCarthey', 'Starr'].join(', '); 
   const exampleProbabilities = ['0.18', '0.32', '0.39', '0.11'].join(', '); 
 
@@ -189,7 +187,6 @@ function ArbolesBinarios() {
     setProbabilitiesInput(exampleProbabilities);
   }
 
-  // --- Estructura JSX ---
   return (
     <div className="container">
       <h1>Árboles Binarios de Búsqueda Óptimos 🌳</h1>
@@ -234,7 +231,7 @@ function ArbolesBinarios() {
       {result && (
         <div className="results-section">
           <h2>✅ Resultado Óptimo</h2>
-          <p>El **Costo Promedio Óptimo** de Búsqueda es: **{result.minCost}** [cite: 390]</p>
+          <p>El <strong>Costo Promedio Óptimo de Búsqueda</strong> es: <strong>{result.minCost}</strong></p>
 
           <hr/>
           
@@ -243,9 +240,6 @@ function ArbolesBinarios() {
             <div className="tree-structure">
               {renderTree(result.optimalTree)}
             </div>
-                        <p className="note-message">
-              *Nota: Este es un diagrama textual simplificado de la estructura del árbol. La raíz es la llave que minimiza el costo total, y los subárboles izquierdo y derecho son construidos recursivamente buscando su propia raíz óptima.*
-            </p>
           </div>
 
           <hr/>
