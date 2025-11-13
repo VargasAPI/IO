@@ -6,7 +6,7 @@ function Main() {
   const navigate = useNavigate();
   const [hoveredId, setHoveredId] = useState(null);
 // Definición de los algoritmos disponibles
-  const algorithms = [
+const algorithms = [
     {
       id: 1,
       name: "Reemplazo de Equipos",
@@ -17,7 +17,7 @@ function Main() {
       id: 2,
       name: "Árboles Binarios de Búsqueda Óptimos",
       description: "Construye árboles de búsqueda que minimizan el costo promedio de búsqueda según frecuencias de acceso.",
-      path: "/arboles-binarios"
+      path: "/arboles-binarios" 
     },
     {
       id: 3,
