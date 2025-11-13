@@ -255,10 +255,10 @@ function ReemplazoEquipos() {
         
         {/* Botones de Guardar y Cargar */}
         <div className="button-group io-buttons">
-          <button type="button" className="btn-save" onClick={handleSave}>
+          <button type="button" className="btn-save btn-secondary file-label" onClick={handleSave}>
             Guardar Problema
           </button>
-          <button type="button" className="btn-load" onClick={() => fileInputRef.current.click()}>
+          <button type="button" className="btn-load btn-secondary file-label" onClick={() => fileInputRef.current.click()}>
             Cargar Problema
           </button>
         </div>
