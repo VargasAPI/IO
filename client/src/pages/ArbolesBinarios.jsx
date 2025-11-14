@@ -1,11 +1,8 @@
-
-
 import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Tree from 'react-d3-tree';
 import '../css/ArbolesBinarios.css';
 import '../css/Main.css';
-
-const MAX_KEYS = 10; // Límite de llaves para el ejemplo de la tabla
 
 function ArbolesBinarios() {
   const navigate = useNavigate();
@@ -14,27 +11,25 @@ function ArbolesBinarios() {
   const [result, setResult] = useState(null);
   const [error, setError] = useState('');
 
-  // Función para volver al menú principal
   const handleBack = () => {
     navigate('/');
   };
 
-  // Función principal del algoritmo de Árboles Binarios de Búsqueda Óptimos
+  /**
+   * Calcula el Árbol Binario de Búsqueda Óptimo usando Programación Dinámica.
+   */
   const calculateOBST = (keys, p) => {
     const n = keys.length;
-    // La suma de probabilidades debe ser 1 (o cercana a 1 por errores de punto flotante)
+    
     const sumP = p.reduce((sum, current) => sum + current, 0);
     if (Math.abs(sumP - 1) > 1e-6) {
-        throw new Error("La suma de las probabilidades debe ser 1.0.");
+        throw new Error("La suma de las probabilidades debe ser 1.0 o muy cercana.");
     }
 
-    // Inicializar las tablas A (Costo) y R (Raíz)
-   
     const A = Array(n + 2).fill(0).map(() => Array(n + 2).fill(0));
     const R = Array(n + 2).fill(0).map(() => Array(n + 2).fill(0));
     const P = Array(n + 1).fill(0); 
 
-    // casos triviales 
     for (let i = 1; i <= n; i++) {
         A[i][i - 1] = 0; 
         R[i][i - 1] = 0; 
@@ -42,24 +37,19 @@ function ArbolesBinarios() {
     }
     A[n+1][n] = 0; 
 
-    // Inicializar caso trivial (Tamaño 1)
     for (let i = 1; i <= n; i++) {
-        A[i][i] = p[i-1];
+        A[i][i] = p[i-1]; 
         R[i][i] = i; 
     }
 
-    
     for (let l = 2; l <= n; l++) { 
         for (let i = 1; i <= n - l + 1; i++) {
             const j = i + l - 1; 
             A[i][j] = Infinity;
             
-            
             const sumProb = P[j] - P[i-1];
             
-            
             for (let k = i; k <= j; k++) {
-                
                 const cost = A[i][k - 1] + A[k + 1][j] + sumProb; 
 
                 if (cost < A[i][j]) {
@@ -70,18 +60,17 @@ function ArbolesBinarios() {
         }
     }
 
-    // Reconstruir el árbol óptimo a partir de la tabla R
     const buildTree = (i, j) => {
         if (i > j) return null;
-        const k = R[i][j];
+        const k = R[i][j]; 
         if (k === 0) return null; 
 
         return {
             key: keys[k - 1], 
-            cost: A[i][j].toFixed(4),
+            cost: A[i][j].toFixed(4), 
             rootIndex: k,
-            left: buildTree(i, k - 1),
-            right: buildTree(k + 1, j),
+            left: buildTree(i, k - 1), 
+            right: buildTree(k + 1, j), 
         };
     };
 
@@ -94,37 +83,32 @@ function ArbolesBinarios() {
     };
   };
 
-  // Función de manejo del cálculo al presionar el botón
   const handleCalculate = () => {
     try {
       setError('');
-      // 1. Procesar la entrada de llaves
+      
       const keys = keysInput.split(',').map(s => s.trim()).filter(s => s !== '');
       if (keys.length === 0) {
         throw new Error('Debe ingresar al menos una llave (ej: A, B, C).');
       }
 
-      // 2. Procesar la entrada de probabilidades
       const probabilities = probabilitiesInput.split(',').map(s => s.trim()).filter(s => s !== '');
       if (probabilities.length === 0) {
         throw new Error('Debe ingresar al menos una probabilidad (ej: 0.1, 0.5, 0.4).');
       }
       
-      // 3. Convertir probabilidades a números y validar
       const p = probabilities.map(s => {
           const num = parseFloat(s);
-          if (isNaN(num) || num < 0 || num > 1) {
-              throw new Error('Todas las probabilidades deben ser números entre 0 y 1.');
+          if (isNaN(num) || num < 0) {
+              throw new Error('Todas las probabilidades deben ser números positivos.');
           }
           return num;
       });
 
-      // 4. Validar que la cantidad de llaves y probabilidades sea la misma
       if (keys.length !== p.length) {
         throw new Error(`El número de llaves (${keys.length}) no coincide con el número de probabilidades (${p.length}).`);
       }
-
-      // 5. Ejecutar el algoritmo
+      
       const res = calculateOBST(keys, p);
       setResult(res);
 
@@ -146,7 +130,6 @@ function ArbolesBinarios() {
             <tr>
               <th>i\j</th>
               {keys.map((_, index) => <th key={index + 1}>{index + 1}</th>)}
-              {isRootTable && <th>LLAVE</th>}
             </tr>
           </thead>
           <tbody>
@@ -156,7 +139,6 @@ function ArbolesBinarios() {
                 {table[i + 1].slice(1, n + 1).map((val, j) => (
                   <td key={j + 1}>{isRootTable ? val : val.toFixed(4)}</td>
                 ))}
-                {isRootTable && <td>{key}</td>}
               </tr>
             ))}
           </tbody>
@@ -165,35 +147,107 @@ function ArbolesBinarios() {
     );
   };
   
-  // Función para renderizar el árbol de forma recursiva
-  const renderTree = (node, level = 0, side = 'Raíz') => {
-    if (!node) return null;
-    const indent = '–'.repeat(level * 4);
-    return (
-      <div className="tree-node">
-        <div>{indent} ({side}) **{node.key}** (Costo Subárbol: {node.cost})</div>
-        {node.left && renderTree(node.left, level + 1, 'Izquierda')}
-        {node.right && renderTree(node.right, level + 1, 'Derecha')}
-      </div>
-    );
+
+
+
+  const handleFileLoad = (event) => {
+    const file = event.target.files[0];
+    if (!file) {
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const content = e.target.result;
+        
+        const lines = content.trim().split('\n');
+
+        if (lines.length < 2) {
+          throw new Error("El archivo debe contener al menos dos líneas: Llaves y Probabilidades.");
+        }
+
+        const keys = lines[0].trim();
+        const probabilities = lines[1].trim();
+
+        setError('');
+        setKeysInput(keys);
+        setProbabilitiesInput(probabilities);
+        
+      } catch (err) {
+        setError(`❌ Error al procesar el archivo: ${err.message}`);
+        setKeysInput('');
+        setProbabilitiesInput('');
+        setResult(null);
+      }
+    };
+
+    reader.onerror = () => {
+      setError("❌ Error leyendo el archivo.");
+    };
+
+    reader.readAsText(file);
+  };
+
+
+ 
+  const prepareTreeData = (treeNode) => {
+    if (!treeNode) return null;
+
+    const data = {
+        name: treeNode.key,
+        attributes: {
+            Costo: treeNode.cost,
+            Índice: treeNode.rootIndex,
+        },
+        children: []
+    };
+
+    if (treeNode.left) {
+        data.children.push(prepareTreeData(treeNode.left));
+    }
+    if (treeNode.right) {
+        data.children.push(prepareTreeData(treeNode.right));
+    }
+    
+    // Ajuste visual para nodos binarios vacíos
+    if (!treeNode.left || !treeNode.right) {
+        if (!treeNode.left) {
+            data.children.unshift({ name: '∅', attributes: { empty: true } });
+        }
+        if (!treeNode.right) {
+            data.children.push({ name: '∅', attributes: { empty: true } });
+        }
+    }
+    data.children = data.children.filter(child => child !== null);
+    
+    return data;
+  };
+
+  const treeData = useMemo(() => {
+    if (result && result.optimalTree) {
+      return [prepareTreeData(result.optimalTree)];
+    }
+    return [];
+  }, [result]);
+
+  const nodeSvgShape = {
+    shape: 'circle',
+    shapeProps: {
+      r: 15,
+      fill: '#E67E22',
+      stroke: '#D35400', 
+      strokeWidth: 2,
+    },
   };
   
-  // Datos de ejemplo (Harrison, Lennon, McCarthey, Starr)
-  const exampleKeys = ['Harrison', 'Lennon', 'McCarthey', 'Starr'].join(', '); 
-  const exampleProbabilities = ['0.18', '0.32', '0.39', '0.11'].join(', '); 
-
-  const loadExample = () => {
-    setKeysInput(exampleKeys);
-    setProbabilitiesInput(exampleProbabilities);
-  }
-
   return (
     <div className="container">
       <h1>Árboles Binarios de Búsqueda Óptimos 🌳</h1>
       <h3>Algoritmo de Programación Dinámica</h3>
       
       <div className="input-group">
-        <label htmlFor="keys-input">Llaves (separadas por coma):</label>
+        <label htmlFor="keys-input">Llaves (separadas por coma, ordenadas alfabéticamente/numéricamente):</label>
         <input
           id="keys-input"
           type="text"
@@ -218,9 +272,20 @@ function ArbolesBinarios() {
         <button className="main-button" onClick={handleCalculate}>
           Calcular Árbol Óptimo
         </button>
-        <button className="secondary-button" onClick={loadExample}>
-          Cargar Ejemplo (PDF)
-        </button>
+        
+        {/* BOTÓN DE CARGA DE ARCHIVO */}
+        <label htmlFor="file-upload" className="file-upload-button secondary-button">
+          Cargar Archivo (.txt)
+        </label>
+        <input 
+          id="file-upload" 
+          type="file" 
+          accept=".txt" 
+          onChange={handleFileLoad} 
+          style={{ display: 'none' }} 
+        />
+        
+
         <button className="exit-button" onClick={handleBack}>
           Volver al Menú
         </button>
@@ -231,19 +296,36 @@ function ArbolesBinarios() {
       {result && (
         <div className="results-section">
           <h2>✅ Resultado Óptimo</h2>
-          <p>El <strong>Costo Promedio Óptimo de Búsqueda</strong> es: <strong>{result.minCost}</strong></p>
+          <p>El **Costo Promedio Óptimo** de Búsqueda (Costo esperado de acceso) es: **{result.minCost}**</p>
 
           <hr/>
           
-          <div className="tree-visualization">
-            <h3>Visualización del Árbol Óptimo (Estructura)</h3>
-            <div className="tree-structure">
-              {renderTree(result.optimalTree)}
-            </div>
+          <div className="tree-visualization-graph" style={{ height: '500px' }}>
+            <h3>Visualización Gráfica del Árbol Óptimo</h3>
+            
+            <Tree
+              data={treeData}
+              orientation="top-to-bottom"
+              separation={{ siblings: 1.5, nonSiblings: 1.5 }}
+              translate={{ x: 400, y: 50 }}
+              nodeSvgShape={nodeSvgShape}
+              nodeLabelComponent={{
+                render: <CustomNodeLabel />,
+                foreignObjectWidth: 100,
+                foreignObjectHeight: 50,
+                style: { fontWeight: 'bold' },
+              }}
+              pathFunc="diagonal" 
+              pathClassFunc={() => 'node-path'}
+            />
+
+            <p className="note-message">
+              *El diagrama usa D3-Tree para visualizar el árbol. Las líneas representan las conexiones jerárquicas óptimas.*
+            </p>
           </div>
 
           <hr/>
-
+          
           <div className="tables-output">
             <h3>Matrices de Programación Dinámica</h3>
             
@@ -259,5 +341,21 @@ function ArbolesBinarios() {
     </div>
   );
 }
+
+// Componente para renderizar la etiqueta del nodo con el nombre
+const CustomNodeLabel = ({ nodeData }) => (
+  <g>
+    <text 
+      fill="black" 
+      strokeWidth="0.5" 
+      x="0" 
+      y="25" 
+      style={{ fontSize: "12px", fontWeight: "bold" }}
+      textAnchor="middle"
+    >
+      {nodeData.name === '∅' ? '' : nodeData.name}
+    </text>
+  </g>
+);
 
 export default ArbolesBinarios;

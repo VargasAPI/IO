@@ -152,3 +152,41 @@
     margin-bottom: 40px;
     font-weight: normal;
 }
+
+
+
+.tree-visualization-graph {
+    
+    height: 500px; 
+    margin-top: 30px;
+    background-color: #f8f8f8; 
+    padding: 0; 
+    border-radius: 8px;
+    position: relative; 
+    overflow: hidden;
+}
+
+
+.node-path {
+    stroke: #34495e; 
+    stroke-width: 2px;
+    fill: none;
+}
+
+
+.file-upload-button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+    user-select: none; 
+}
+
+
+
+.file-upload-button.secondary-button:hover {
+    background-color: #e67e22;
+}
